@@ -3,6 +3,7 @@
 #include <adventlib/Parser.hpp>
 #include <adventlib/utilities.hpp>
 
+#include <limits>
 #include <numeric>
 
 namespace
@@ -23,7 +24,7 @@ namespace
 		return result;
 	}
 
-	std::vector<IdPair> parse_input(std::string_view str)
+	std::vector<IdPair> parse_id_pairs(std::string_view str)
 	{
 		return sb::transform(sb::split_lines(str), parse_id_pair);
 	}
@@ -57,6 +58,11 @@ namespace
 		return id_lists;
 	}
 
+	IdLists parse_sorted_id_lists(std::string_view str)
+	{
+		return sort_id_lists(split_id_lists(parse_id_pairs(str)));
+	}
+
 	IdDiff get_id_diff_sum(IdLists const& id_lists)
 	{
 		assert(id_lists.left.size() == id_lists.right.size());
@@ -70,19 +76,62 @@ namespace
 
 		return sum;
 	}
+
+	IdDiff get_similarity_score(IdLists const& id_lists)
+	{
+		auto next_right_id = id_lists.right.begin();
+
+		auto const has_next_right_id = [&]() -> bool
+		{ return next_right_id != id_lists.right.end(); };
+
+		Id right_id;
+		IdDiff right_id_occurence;
+
+		auto const load_next_right_id = [&]() -> void
+		{
+			assert(has_next_right_id());
+			right_id_occurence = 1;
+			right_id = *next_right_id++;
+			while (has_next_right_id() && *next_right_id == right_id)
+			{
+				++right_id_occurence;
+				++next_right_id;
+			}
+		};
+
+		load_next_right_id();
+
+		IdDiff similarity_score = 0;
+
+		for (Id const left_id: id_lists.left)
+		{
+			while (has_next_right_id() && left_id > right_id)
+			{
+				load_next_right_id();
+			}
+
+			if (left_id == right_id)
+			{
+				similarity_score += right_id * right_id_occurence;
+			}
+		}
+
+		return similarity_score;
+	}
 } // namespace
 
 std::string sb::day_1_1(std::string const& input)
 {
-	std::vector<IdPair> const id_pairs = parse_input(input);
-	IdLists id_lists = split_id_lists(id_pairs);
-	id_lists = sort_id_lists(std::move(id_lists));
+	IdLists const id_lists = parse_sorted_id_lists(input);
 	IdDiff const id_diff = get_id_diff_sum(id_lists);
 
 	return sb::to_string(id_diff);
 }
 
-std::string sb::day_1_2(std::string const& /*input*/)
+std::string sb::day_1_2(std::string const& input)
 {
-	return "";
+	IdLists const id_lists = parse_sorted_id_lists(input);
+	IdDiff const id_diff = get_similarity_score(id_lists);
+
+	return sb::to_string(id_diff);
 }
