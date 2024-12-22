@@ -17,16 +17,16 @@ TEST_CASE("day1")
 	CHECK(sb::run_day_with_default_input(1, 2) == "28786472");
 }
 
-////==============================================================================
-// TEST_CASE("day2")
-//{
-//	// CHECK(sb::run_day_with_test_input(2, 1, 1) == "");
-//	// CHECK(sb::run_day_with_default_input(2, 1) == "");
-//
-//	// CHECK(sb::run_day_with_test_input(2, 2, 1) == "");
-//	// CHECK(sb::run_day_with_default_input(2, 2) == "");
-// }
-//
+//==============================================================================
+TEST_CASE("day2")
+{
+	CHECK(sb::run_day_with_test_input(2, 1, 1) == "2");
+	// CHECK(sb::run_day_with_default_input(2, 1) == "");
+
+	// CHECK(sb::run_day_with_test_input(2, 2, 1) == "");
+	// CHECK(sb::run_day_with_default_input(2, 2) == "");
+}
+
 ////==============================================================================
 // TEST_CASE("day3")
 //{
