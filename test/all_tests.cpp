@@ -23,8 +23,8 @@ TEST_CASE("day2")
 	CHECK(sb::run_day_with_test_input(2, 1, 1) == "2");
 	CHECK(sb::run_day_with_default_input(2, 1) == "287");
 
-	// CHECK(sb::run_day_with_test_input(2, 2, 1) == "");
-	// CHECK(sb::run_day_with_default_input(2, 2) == "");
+	CHECK(sb::run_day_with_test_input(2, 2, 1) == "4");
+	CHECK(sb::run_day_with_default_input(2, 2) == "354");
 }
 
 ////==============================================================================
